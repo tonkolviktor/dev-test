@@ -1,7 +1,7 @@
 Java Developer Test
 =============
 
-The application was developer in TDD (see history)
+The application was developed in TDD (see history)
 
 ## Obtain jar file
 
