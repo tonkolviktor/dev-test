@@ -3,11 +3,11 @@ Java Developer Test
 
 ## Obtain jar file
 
-### 1. Without build
+**1. Without build**
 
 Download jar from: [dist/GoEuroTest.jar](dist/GoEuroTest.jar)
 
-### 2. Build with maven
+**2. Build with maven**
 
 * clone repository: git clone https://github.com/tonkolviktor/dev-test
 * run maven package: mvn package
