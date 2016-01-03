@@ -1,19 +1,19 @@
 Java Developer Test
 =============
 
-# Obtain jar file
+## Obtain jar file
 
-## 1. Without build
+### 1. Without build
 
 Download jar from: [dist/GoEuroTest.jar](dist/GoEuroTest.jar)
 
-## 2. Build with maven
+### 2. Build with maven
 
-clone repository: git clone https://github.com/tonkolviktor/dev-test
-run maven package: mvn package
-jar file location: target/GoEuroTest.jar
+* clone repository: git clone https://github.com/tonkolviktor/dev-test
+* run maven package: mvn package
+* jar file location: target/GoEuroTest.jar
 
-# Run the application
+## Run the application
 
 java -jar GoEuroTest.jar Berlin
 
@@ -23,19 +23,19 @@ java -jar target/GoEuroTest.jar "Bernau bei Berlin"
 
 The result CSV file will be: ./result.csv
 
-# Run unit tests
+## Run unit tests
 
 mvn test
 
-# Run end-to-end test (it will actually call the backend)
+## Run end-to-end test (it will actually call the backend)
 
-E2E test does not run by default because e2e test actually call the backend. It can be run with the following command. See [pom.xml](pom.xml) for details on configuration.
+E2E tests do not run by default because e2e test actually call the backend. It can be run with the following command. See [pom.xml](pom.xml) for details on configuration.
 
 mvn test -Pwith-e2e-tests
 
-# Documentation
+## Documentation
 
-## Used frameworks
+### Used frameworks
 
 * Maven: dependency management, building, jar assembly
 * Jersey: JAX-RS Client
@@ -45,12 +45,13 @@ mvn test -Pwith-e2e-tests
 * AssertJ: assertion framework, for more readable test cases
 * PODAM: POjo DAta Mocker
 
-## Directory layout
+### Directory layout
 
 pom.xml: maven pom file with dependencies, unit test and e2e test configuration
 
-### Main files
+#### Main files
 
+```
 java/devtest/Application: Main class, error handling only here, main controller: 1. create components, 2. call backend, 3. export results
 java/devtest/Argument: class to handle command line arguments
 java/devtest/BusinessException: exception class used in the application
@@ -58,11 +59,14 @@ java/devtest/Configuration: default configuration values (csv column separator, 
 java/devtest/export/CsvExport: class to write cities to csv file. To create CSV file in java is not difficult, thus no 3rd party lib was used
 java/devtest/backend/BackendService: class to call backend with Jersey/Jackson, and return cities list
 java/devtest/backend/City + GeoPosition: POJO-s for representing JSON response data
+```
 
-### Test files
+#### Test files
 
+```
 test/devtest/TestUtil: common method and test variables
 test/devtest/ArgumentTest: unit tests for Argument class (assert empty args...)
 test/devtest/export/CsvExportTest: unit tests for CsvExport class (assert file creation, header and content)
 test/devtest/e2e/backend/BackendServiceTest: e2e tests for BackendService (happy day scenario and exceptions)
 test/devtest/e2e/ApplicationTest: e2e test for the whole application: (missing argument, file creation & content, ...)
+```
