@@ -6,4 +6,6 @@ package hu.tonkol.devtest;
 public class Configuration {
 
     public static final String BASE_REST_API = "http://api.goeuro.com/api/v2/";
+    public static final String RESULT_FILE_WITHOUT_EXTENSION = "result";
+    public static final Character CSV_COLUMN_SEPARATOR = ',';
 }
