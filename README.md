@@ -1,83 +1,68 @@
 Java Developer Test
-===================
-
-The purpose of this test is to see how you approach a problem and what your solutions look like. The requirements for this test are simple and should be straightforward to grasp. When implementing a solution, please keep things simple but well engineered - as you would do for production code. 
-That said:
-Implement an API query and transform this data into a csv file
-Create a Java command line tool that takes as an input parameter a string
-
-java -jar GoEuroTest.jar "CITY_NAME"
-
-The program takes this string and queries with it our Location JSON API:
-The app should use this API endpoint:
-
-http://api.goeuro.com/api/v2/position/suggest/en/CITY_NAME
-
-Where CITY_NAME is the string that the user has entered as a parameter when calling the tool, e.g.
-
-http://api.goeuro.com/api/v2/position/suggest/en/Berlin
-
-The API endpoint returns JSON documents like these:
-
-```javascript
-[
-
- {
-
- _id: 377078,
- key: null,
- name: "Potsdam",
- fullName: "Potsdam, Germany",
- iata_airport_code: null,
- type: "location",
- country: "Germany",
-
- geo_position: {
- latitude: 52.39886,
- longitude: 13.06566
- },
- location_id: 377078,
- inEurope: true,
- countryCode: "DE",
- coreCountry: true,
- distance: null
- },
-
- {
- _id: 410978,
- key: null,
- name: "Potsdam",
- fullName: "Potsdam, USA",
- iata_airport_code: null,
- type: "location",
- country: "USA",
-
- geo_position: {
- latitude: 44.66978,
- longitude: -74.98131
- },
-
- location_id: 410978,
- inEurope: false,
- countryCode: "US",
- coreCountry: false,
- distance: null
- }
- ]
-```
-
-The endpoint always responds with a JSON array that contains JSON objects as elements. Each object, among other keys, has a name and a geo_position key.
-The geo_position key is an object with latitude and longitude fields.
-If no matches are found an empty JSON array is returned.
-
-The program should query the API with the user input and create a CSV file from it. The CSV file should have the form: _id, name, type, latitude,
-longitude
-
-Your solution
 =============
 
-Please implement your solution as a stand alone application which can be started from the command line, i.e. send us a fat jar file with all dependencies. You can use Java 7 and open source libraries that you think help you to fulfill this task.
-Also send us the source code to your solution. We use GitHub, so if you put your source code into a GitHub repository, it will make our life easier.
-We will evaluate your source code as well as the functionality of the program: Does it run, how does it handle errors, how well-engineered is the architecture etc.
-Thank you!
+# Obtain jar file
 
+## 1. Without build
+
+Download jar from: [dist/GoEuroTest.jar](dist/GoEuroTest.jar)
+
+## 2. Build with maven
+
+clone repository: git clone https://github.com/tonkolviktor/dev-test
+run maven package: mvn package
+jar file location: target/GoEuroTest.jar
+
+# Run the application
+
+java -jar GoEuroTest.jar Berlin
+
+or
+
+java -jar target/GoEuroTest.jar "Bernau bei Berlin"
+
+The result CSV file will be: ./result.csv
+
+# Run unit tests
+
+mvn test
+
+# Run end-to-end test (it will actually call the backend)
+
+E2E test does not run by default because e2e test actually call the backend. It can be run with the following command. See [pom.xml](pom.xml) for details on configuration.
+
+mvn test -Pwith-e2e-tests
+
+# Documentation
+
+## Used frameworks
+
+* Maven: dependency management, building, jar assembly
+* Jersey: JAX-RS Client
+* Jackson: JSON Provider
+* Apache Commons
+* TestNG: test runner for unit and e2e tests
+* AssertJ: assertion framework, for more readable test cases
+* PODAM: POjo DAta Mocker
+
+## Directory layout
+
+pom.xml: maven pom file with dependencies, unit test and e2e test configuration
+
+### Main files
+
+java/devtest/Application: Main class, error handling only here, main controller: 1. create components, 2. call backend, 3. export results
+java/devtest/Argument: class to handle command line arguments
+java/devtest/BusinessException: exception class used in the application
+java/devtest/Configuration: default configuration values (csv column separator, backend base url, ...)
+java/devtest/export/CsvExport: class to write cities to csv file. To create CSV file in java is not difficult, thus no 3rd party lib was used
+java/devtest/backend/BackendService: class to call backend with Jersey/Jackson, and return cities list
+java/devtest/backend/City + GeoPosition: POJO-s for representing JSON response data
+
+### Test files
+
+test/devtest/TestUtil: common method and test variables
+test/devtest/ArgumentTest: unit tests for Argument class (assert empty args...)
+test/devtest/export/CsvExportTest: unit tests for CsvExport class (assert file creation, header and content)
+test/devtest/e2e/backend/BackendServiceTest: e2e tests for BackendService (happy day scenario and exceptions)
+test/devtest/e2e/ApplicationTest: e2e test for the whole application: (missing argument, file creation & content, ...)

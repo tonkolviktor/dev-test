@@ -1,5 +1,8 @@
-package hu.tonkol.devtest;
+package hu.tonkol.devtest.e2e;
 
+import hu.tonkol.devtest.Application;
+import hu.tonkol.devtest.Configuration;
+import hu.tonkol.devtest.TestUtil;
 import hu.tonkol.devtest.export.CsvExport;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
