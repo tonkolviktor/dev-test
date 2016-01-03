@@ -1,6 +1,9 @@
 Java Developer Test
 =============
 
+This repository contains my solution.
+The application was developer in TDD (see history)
+
 ## Obtain jar file
 
 **1. Without build**
