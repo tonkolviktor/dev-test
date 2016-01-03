@@ -1,6 +1,5 @@
 package hu.tonkol.devtest.export;
 
-import hu.tonkol.devtest.BusinessException;
 import hu.tonkol.devtest.Configuration;
 import hu.tonkol.devtest.backend.City;
 import org.testng.annotations.BeforeMethod;
@@ -15,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static hu.tonkol.devtest.TestUtil.readFileContent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -51,7 +51,7 @@ public class CsvExportTest {
         csvExport.export(cities);
         //then
         assertThat(resultFile).hasContent("_id,name,type,latitude,longitude");
-        String content = readFileContent();
+        String content = readFileContent(resultFile);
         assertThat(content).hasLineCount(1);
     }
 
@@ -62,7 +62,7 @@ public class CsvExportTest {
         //when
         csvExport.export(cities);
         //then
-        String content = readFileContent();
+        String content = readFileContent(resultFile);
         assertThat(content).hasLineCount(6);
         assertThat(content).contains(getCityLine(cities.get(0)));
     }
@@ -80,15 +80,6 @@ public class CsvExportTest {
         sb.append(city.getGeo_position().getLongitude());
 
         return sb.toString();
-    }
-
-    private String readFileContent() {
-        try {
-            return new String(Files.readAllBytes(resultFile));
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new BusinessException("Error during test: " + e.getMessage());
-        }
     }
 
     private List<City> createCities(int numberOfCities) {

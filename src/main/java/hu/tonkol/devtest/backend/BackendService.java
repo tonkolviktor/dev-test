@@ -32,7 +32,7 @@ public class BackendService {
         try {
             return request.get();
         } catch (ProcessingException pe) {
-            throw new BusinessException("Error during backend call: " + pe.getMessage());
+            throw new BusinessException("Error during backend call: " + pe.getMessage(), pe);
         }
     }
 

@@ -6,6 +6,7 @@ import hu.tonkol.devtest.backend.City;
 import hu.tonkol.devtest.backend.GeoPosition;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -18,26 +19,32 @@ import java.util.List;
  */
 public class CsvExport {
 
-    private final Path directory;
     private final Path resultPath;
 
     public CsvExport(Path directory) {
-        this.directory = directory;
         this.resultPath = directory.resolve(getResultFileName());
     }
 
     public void export(List<City> cities) {
         BufferedWriter writer = null;
         try {
-            Files.createFile(resultPath);
+            reCreateFile();
             writer = Files.newBufferedWriter(resultPath, Charset.defaultCharset(), StandardOpenOption.APPEND);
             writeHeader(writer);
             writeCities(writer, cities);
         } catch (IOException e) {
-            throw new BusinessException("Error occurred during csv export: " + e.getMessage());
+            throw new BusinessException("Error occurred during csv export: " + e.getMessage(), e);
         } finally {
             closeWriter(writer);
         }
+    }
+
+    private void reCreateFile() throws IOException {
+        File file = resultPath.toFile();
+        if(file.exists()) {
+            file.delete();
+        }
+        Files.createFile(resultPath);
     }
 
     private void writeCities(BufferedWriter writer, List<City> cities) throws IOException {
@@ -76,7 +83,7 @@ public class CsvExport {
             try {
                 writer.close();
             } catch (IOException e) {
-                throw new BusinessException("Error occurred during csv export: " + e.getMessage());
+                throw new BusinessException("Error occurred during csv export: " + e.getMessage(), e);
             }
         }
     }
