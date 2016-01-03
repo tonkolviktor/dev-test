@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 public class ApplicationTest {
 
     @Test
-    public void shouldMainStartApplication() {
+    public void shouldMainRequireOneArgument() {
         //given
         //when
         Application.main(new String[0]);
